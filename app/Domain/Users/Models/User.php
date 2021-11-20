@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace Domain\Users\Models;
 
-use Domain\Users\Models\Traits\HasValidationRules;
+use Laravel\Sanctum\HasApiTokens;
+use Database\Factories\UserFactory;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Domain\Users\Models\Traits\HasValidationRules;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
@@ -54,5 +55,10 @@ class User extends Authenticatable
         }
 
         $this->attributes['email'] = strtolower(trim($email));
+    }
+
+    protected static function newFactory()
+    {
+        return UserFactory::new();
     }
 }
