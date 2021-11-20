@@ -7,10 +7,15 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Domain\Users\V1\Dtos\NewUserData;
 use Illuminate\Support\Facades\Cookie;
+use Domain\Users\V1\Dtos\UpdateUserData;
 use App\Http\Requests\User\V1\LoginRequest;
 use App\Http\Requests\User\V1\RegisterRequest;
 use Symfony\Component\HttpFoundation\Response;
 use Domain\Users\V1\Actions\CreateNewUserAction;
+use Domain\Users\V1\Actions\UpdatePasswordAction;
+use App\Http\Requests\User\V1\UpdateProfileRequest;
+use App\Http\Requests\User\V1\UpdatePasswordRequest;
+use Domain\Users\V1\Actions\UpdateProfileInfoAction;
 
 class AuthController extends Controller
 {
@@ -51,5 +56,25 @@ class AuthController extends Controller
     public function user(Request $request)
     {
         return $request->user();
+    }
+
+    public function updateInfo(UpdateProfileRequest $request, UpdateProfileInfoAction $handler)
+    {
+        $user = $request->user();
+
+        $userData = UpdateUserData::fromRequest($request);
+
+        $user = ($handler)($user, $userData);
+
+        return response($user, Response::HTTP_ACCEPTED);
+    }
+
+    public function updatePassword(UpdatePasswordRequest $request, UpdatePasswordAction $handler)
+    {
+        $user = $request->user();
+
+        $user = ($handler)($user, $request->input('password'));
+
+        return response($user, Response::HTTP_ACCEPTED);
     }
 }

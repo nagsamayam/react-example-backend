@@ -36,8 +36,21 @@ trait HasValidationRules
         ];
     }
 
+    public static function updateEmailValidationRules(int $userId): array
+    {
+        return [
+            'bail',
+            'required',
+            'string',
+            'email',
+            'max:255',
+            Rule::when(app()->environment() !== 'local', 'indisposable'),
+            new ValidateEmailDomain, Rule::unique('users')->ignore($userId),
+        ];
+    }
+
     public static function passwordValidationRules(): array
     {
-        return ['bail', 'required', Password::defaults(), 'confirmed',];
+        return ['bail', 'required', 'string', Password::defaults(), 'confirmed',];
     }
 }
