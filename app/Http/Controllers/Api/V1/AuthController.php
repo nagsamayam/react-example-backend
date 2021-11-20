@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Domain\Users\V1\Dtos\NewUserData;
+use Illuminate\Support\Facades\Cookie;
 use App\Http\Requests\User\V1\LoginRequest;
 use App\Http\Requests\User\V1\RegisterRequest;
 use Symfony\Component\HttpFoundation\Response;
 use Domain\Users\V1\Actions\CreateNewUserAction;
-use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
@@ -38,6 +39,13 @@ class AuthController extends Controller
         return response([
             'jwt_token' => $plainTextToken,
         ])->withCookie($cookie);
+    }
+
+    public function logout()
+    {
+        $cookie = Cookie::forget('jwt_token');
+
+        return response()->noContent()->withCookie($cookie);
     }
 
     public function user(Request $request)
