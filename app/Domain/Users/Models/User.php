@@ -50,10 +50,6 @@ class User extends Authenticatable
 
     public function setEmailAttribute(string $email): void
     {
-        if ($this->email) {
-            return;
-        }
-
         $this->attributes['email'] = strtolower(trim($email));
     }
 
