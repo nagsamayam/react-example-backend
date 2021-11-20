@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\V1\RegisterRequest;
+use App\Http\Requests\User\V1\UpdateProfileRequest;
+use App\Http\Resources\V1\UserResource;
 use Domain\Users\Models\User;
 use Domain\Users\V1\Actions\CreateNewUserAction;
 use Domain\Users\V1\Dtos\NewUserData;
@@ -12,9 +14,9 @@ use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return User::paginate();
+        return UserResource::collection(User::with('roles')->paginate($request->input('perPage', 15)));
     }
 
     public function store(RegisterRequest $request, CreateNewUserAction $handler)
@@ -23,21 +25,23 @@ class UserController extends Controller
 
         $user = ($handler)($userData);
 
-        return response($user, Response::HTTP_CREATED);
+        return response(new UserResource($user), Response::HTTP_CREATED);
     }
 
     public function show($id)
     {
-        return response(User::find($id));
+        $user = User::with('roles')->find($id);
+
+        return new UserResource($user);
     }
 
-    public function update(Request $request, $id)
+    public function update(UpdateProfileRequest $request, $id)
     {
         $user = User::find($id);
 
         $user->update($request->only('first_name', 'last_name', 'email'));
 
-        return response($user, Response::HTTP_ACCEPTED);
+        return response(new UserResource($user), Response::HTTP_ACCEPTED);
     }
 
     public function destroy($id)

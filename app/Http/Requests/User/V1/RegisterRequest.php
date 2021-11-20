@@ -6,6 +6,7 @@ namespace App\Http\Requests\User\V1;
 
 use Domain\Users\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class RegisterRequest extends FormRequest
 {
@@ -30,7 +31,8 @@ class RegisterRequest extends FormRequest
             'first_name' => User::firstNameValidationRules(),
             'last_name' => User::lastNameValidationRules(),
             'email' => User::emailValidationRules(),
-            'password' => User::passwordValidationRules()
+            'password' => User::passwordValidationRules(),
+            'role_id' => ['required', Rule::exists('roles', 'id'),],
         ];
     }
 }
