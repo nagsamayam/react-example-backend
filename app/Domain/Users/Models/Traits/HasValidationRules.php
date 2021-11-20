@@ -45,7 +45,8 @@ trait HasValidationRules
             'email',
             'max:255',
             Rule::when(app()->environment() !== 'local', 'indisposable'),
-            new ValidateEmailDomain, Rule::unique('users')->ignore($userId),
+            new ValidateEmailDomain,
+            Rule::unique('users')->ignore($userId),
         ];
     }
 

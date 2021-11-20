@@ -17,6 +17,11 @@ class UpdateProfileInfoAction
             'email' => $userData->email,
         ])->save();
 
-        return $user;   
+        $user->roles()->detach();
+        $user->forgetCachedPermissions();
+
+        $user->assignRole($userData->role);
+
+        return $user;
     }
 }

@@ -19,6 +19,8 @@ class CreateNewUserAction
             'password' => Hash::make($userData->password),
         ]);
 
+        $user->assignRole($userData->role);
+
         return $user;
     }
 }

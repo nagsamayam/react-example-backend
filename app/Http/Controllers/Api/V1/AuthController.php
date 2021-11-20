@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Domain\Users\V1\Dtos\NewUserData;
 use Illuminate\Support\Facades\Cookie;
+use App\Http\Resources\V1\UserResource;
 use Domain\Users\V1\Dtos\UpdateUserData;
 use App\Http\Requests\User\V1\LoginRequest;
 use App\Http\Requests\User\V1\RegisterRequest;
@@ -25,7 +26,7 @@ class AuthController extends Controller
 
         $user = ($handler)($userData);
 
-        return response($user, Response::HTTP_CREATED);
+        return response(new UserResource($user), Response::HTTP_CREATED);
     }
 
     public function login(LoginRequest $request)
@@ -55,7 +56,7 @@ class AuthController extends Controller
 
     public function user(Request $request)
     {
-        return $request->user();
+        return response(new UserResource($request->user()));
     }
 
     public function updateInfo(UpdateProfileRequest $request, UpdateProfileInfoAction $handler)
@@ -66,14 +67,14 @@ class AuthController extends Controller
 
         $user = ($handler)($user, $userData);
 
-        return response($user, Response::HTTP_ACCEPTED);
+        return response(new UserResource($user), Response::HTTP_ACCEPTED);
     }
 
     public function updatePassword(UpdatePasswordRequest $request, UpdatePasswordAction $handler)
     {
         $user = $request->user();
 
-        $user = ($handler)($user, $request->input('password'));
+        $user = ($handler)(new UserResource($user), $request->input('password'));
 
         return response($user, Response::HTTP_ACCEPTED);
     }

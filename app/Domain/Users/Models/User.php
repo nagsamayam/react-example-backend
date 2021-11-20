@@ -6,18 +6,23 @@ namespace Domain\Users\Models;
 
 use Laravel\Sanctum\HasApiTokens;
 use Database\Factories\UserFactory;
+use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Domain\Users\Models\Traits\HasValidationRules;
+use Domain\Users\Models\Traits\HasGetters;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
     use HasApiTokens;
     use HasFactory;
+    use HasGetters;
     use HasValidationRules;
     use Notifiable;
+    use HasRoles;
 
     /**
      * The attributes that should be hidden for serialization.
@@ -56,5 +61,10 @@ class User extends Authenticatable
     protected static function newFactory()
     {
         return UserFactory::new();
+    }
+
+    public static function guardName(): string
+    {
+        return 'sanctum';
     }
 }
