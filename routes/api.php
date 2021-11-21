@@ -2,7 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\AuthController;
+use App\Http\Controllers\Api\V1\ImageController;
 use App\Http\Controllers\Api\V1\PermissionController;
+use App\Http\Controllers\Api\V1\ProductController;
 use App\Http\Controllers\Api\V1\RoleController;
 use App\Http\Controllers\Api\V1\UserController;
 
@@ -29,4 +31,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('/users', UserController::class);
     Route::apiResource('roles', RoleController::class);
     Route::get('/permissions', [PermissionController::class, 'index']);
+    Route::apiResource('/products', ProductController::class);
+
+    Route::post('/images', [ImageController::class, 'upload']);
 });
