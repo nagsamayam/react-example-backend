@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\ImageController;
+use App\Http\Controllers\Api\V1\OrderController;
 use App\Http\Controllers\Api\V1\PermissionController;
 use App\Http\Controllers\Api\V1\ProductController;
 use App\Http\Controllers\Api\V1\RoleController;
@@ -34,4 +35,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('/products', ProductController::class);
 
     Route::post('/images', [ImageController::class, 'upload']);
+
+    Route::apiResource('/orders', OrderController::class)->only('index', 'show');
+    Route::post('/export', [OrderController::class, 'export']);
+
+    Route::get('/chart', [OrderController::class, 'chart']);
 });
