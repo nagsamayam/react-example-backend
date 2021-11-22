@@ -16,11 +16,15 @@ class UserController extends Controller
 {
     public function index(Request $request)
     {
+        $this->authorize('view', 'users');
+
         return UserResource::collection(User::with('roles')->paginate($request->input('perPage', 15)));
     }
 
     public function store(RegisterRequest $request, CreateNewUserAction $handler)
     {
+        $this->authorize('edit', 'users');
+
         $userData = NewUserData::fromRequest($request);
 
         $user = ($handler)($userData);
@@ -30,6 +34,8 @@ class UserController extends Controller
 
     public function show($id)
     {
+        $this->authorize('view', 'users');
+
         $user = User::with('roles')->find($id);
 
         return new UserResource($user);
@@ -37,6 +43,8 @@ class UserController extends Controller
 
     public function update(UpdateProfileRequest $request, $id)
     {
+        $this->authorize('edit', 'users');
+
         $user = User::find($id);
 
         $user->update($request->only('first_name', 'last_name', 'email'));
@@ -46,6 +54,8 @@ class UserController extends Controller
 
     public function destroy($id)
     {
+        $this->authorize('edit', 'users');
+
         User::destroy($id);
 
         return response()->noContent();

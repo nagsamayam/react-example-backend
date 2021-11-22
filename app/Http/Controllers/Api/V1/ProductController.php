@@ -16,18 +16,17 @@ use Domain\Products\V1\Actions\CreateNewProductAction;
 
 class ProductController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
+        $this->authorize('view', 'products');
+
         return ProductResource::collection(Product::latest()->paginate());
     }
 
     public function store(ProductRequest $request, CreateNewProductAction $handler)
     {
+        $this->authorize('edit', 'products');
+
         try {
             $productData = ProductData::fromRequest($request);
 
@@ -41,6 +40,8 @@ class ProductController extends Controller
 
     public function show($id)
     {
+        $this->authorize('view', 'products');
+
         $product = Product::find($id);
 
         return new ProductResource($product);
@@ -48,6 +49,8 @@ class ProductController extends Controller
 
     public function update(ProductRequest $request, $id, UpdateProductAction $handler)
     {
+        $this->authorize('edit', 'products');
+
         try {
             $product = Product::find($id);
             $productData = ProductData::fromRequest($request);
@@ -60,14 +63,10 @@ class ProductController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
+        $this->authorize('edit', 'products');
+
         Product::destroy($id);
 
         return response()->noContent();

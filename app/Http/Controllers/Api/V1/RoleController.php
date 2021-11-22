@@ -13,11 +13,15 @@ class RoleController extends Controller
 {
     public function index()
     {
+        $this->authorize('view', 'roles');
+
         return RoleResource::collection(Role::with('permissions')->paginate());
     }
 
     public function store(Request $request)
     {
+        $this->authorize('edit', 'roles');
+
         try {
             $role = DB::transaction(function () use ($request) {
                 $role = Role::create($request->only('name'));
@@ -40,6 +44,8 @@ class RoleController extends Controller
 
     public function show($id)
     {
+        $this->authorize('view', 'roles');
+
         $role = Role::find($id);
 
         return new RoleResource($role->load('permissions'));
@@ -47,6 +53,8 @@ class RoleController extends Controller
 
     public function update(Request $request, $id)
     {
+        $this->authorize('edit', 'roles');
+
         $role = Role::find($id);
 
         DB::transaction(function () use ($role, $request) {
@@ -61,6 +69,8 @@ class RoleController extends Controller
 
     public function destroy($id)
     {
+        $this->authorize('edit', 'roles');
+
         Role::destroy($id);
 
         return response()->noContent();
