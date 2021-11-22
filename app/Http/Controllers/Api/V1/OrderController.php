@@ -12,6 +12,8 @@ class OrderController extends Controller
 {
     public function index()
     {
+        $this->authorize('view', 'orders');
+
         $orders = Order::with('orderItems')->latest()->paginate();
 
         return OrderResource::collection($orders);
