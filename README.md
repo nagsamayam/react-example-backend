@@ -24,7 +24,7 @@
 
 ### Installation
 
--   Clone the repo `git clone https://github.com/nagsamayam/laravel-admin-api.git <projectname>`
+-   Clone the repo `git clone https://github.com/nagsamayam/react-example-backend.git <projectname>`
 -   `cd <projectname>`
 -   `composer install --no-interaction --prefer-dist --optimize-autoloader --ignore-platform-reqs`
 -   `cp .env.example .env`
