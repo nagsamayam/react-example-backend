@@ -74,8 +74,8 @@ class AuthController extends Controller
     {
         $user = $request->user();
 
-        $user = ($handler)(new UserResource($user), $request->input('password'));
+        $user = ($handler)($user, $request->input('password'));
 
-        return response($user, Response::HTTP_ACCEPTED);
+        return response(['message' => 'Password updated',], Response::HTTP_ACCEPTED);
     }
 }
