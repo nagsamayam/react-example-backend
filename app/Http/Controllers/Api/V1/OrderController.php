@@ -60,7 +60,7 @@ class OrderController extends Controller
     {
         return Order::query()
             ->join('order_items', 'orders.id', '=', 'order_items.order_id')
-            ->selectRaw("DATE_FORMAT(orders.created_at, '%Y-m-d%') AS date, SUM(order_items.price * order_items.quantity) AS sum")
+            ->selectRaw("DATE_FORMAT(orders.created_at, '%Y-%m-%d') AS date, SUM(order_items.price * order_items.quantity) AS sum")
             ->groupBy('date')
             ->get();
     }
