@@ -15,7 +15,9 @@ class RoleController extends Controller
     {
         $this->authorize('view', 'roles');
 
-        return RoleResource::collection(Role::with('permissions')->paginate());
+        $roles = Role::with('permissions')->latest()->paginate();
+
+        return RoleResource::collection($roles);
     }
 
     public function store(Request $request)

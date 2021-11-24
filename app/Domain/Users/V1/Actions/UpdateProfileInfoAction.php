@@ -18,9 +18,8 @@ class UpdateProfileInfoAction
         ])->save();
 
         $user->roles()->detach();
-        $user->forgetCachedPermissions();
-
         $user->assignRole($userData->role);
+        $user->forgetCachedPermissions();
 
         return $user;
     }
